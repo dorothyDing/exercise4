@@ -4,7 +4,8 @@ describe('this', function () {
       say: function () {
         setTimeout(() => {
           // this 是什么？想想为什么？
-          this.should.equal(null)
+          // es6中箭头函数中this指向所在函数的this
+          this.should.equal(obj)
           done()
         }, 0)
       }
@@ -15,7 +16,8 @@ describe('this', function () {
   it('global', function () {
     function test() {
       // this 是什么？想想为什么？
-      this.should.equal(null)
+      // node环境下的全局变量是global
+      this.should.equal(global);
     }
     test()
   })
@@ -26,7 +28,7 @@ describe('this', function () {
         say: function () {
           function _say() {
             // this 是什么？想想为什么？
-            this.should.equal(null)
+            this.should.equal(global)
           }
           return _say.bind(obj)
         }()
@@ -39,10 +41,11 @@ describe('this', function () {
       obj.say = function () {
         function _say() {
           // this 是什么？想想为什么？
-          this.should.equal(null)
+          // this是动态绑定的，他的指向由执行的时候决定，而非定义
+          this.should.equal(obj);
         }
         return _say.bind(obj)
-      }()
+      }() 
       obj.say()
     })
   })
